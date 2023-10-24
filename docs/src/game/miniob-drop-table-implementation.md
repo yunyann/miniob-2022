@@ -45,7 +45,7 @@ RC DefaultHandler::drop_table(const char *dbname, const char *relation_name) {
 在db.cpp中，实现drop_table接口
 
 ```c++
-RC Db::drop_table(const char* table_name)
+RC (const char* table_name)
 {
     auto it = opened_tables_.find(table_name);
     if (it == opened_tables_.end())
