@@ -84,7 +84,20 @@ RC Db::create_table(const char *table_name, int attribute_count, const AttrInfoS
     LOG_WARN("%s has been opened before.", table_name);
     return RC::SCHEMA_TABLE_EXIST;
   }
-
+RC Db::drop_table(const char*table_name)
+{
+  auto it=oprned_tables_.find(table_name);
+  if(it==opened_tables_.end())
+  {
+    return SCHEMA_TABLE_NOT_EXIST;
+  }
+  Table*table=it->second;
+  RC rc=table->destroy(path_.c_str());
+  if(rc!=RC::SUCCESS)return rc;
+  opened_tables_.erase(it);
+  delete table;
+  return RC::SUCCESS;
+}
   // 文件路径可以移到Table模块
   std::string table_file_path = table_meta_file(path_.c_str(), table_name);
   Table *table = new Table();
